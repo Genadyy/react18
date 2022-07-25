@@ -1,0 +1,38 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+#root{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+.App {
+  width: 800px;
+  padding-top: 30px;
+}
+.title{
+  text-align: center;
+  color: red;
+  margin: 20px 0;
+  font-size: 35px;
+  font-family: sans-serif;
+}
+.post{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 2px solid teal;
+}
+.post_title{
+  font-size: 25px;
+}
+.post_body{
+  font-size: 20px;
+}
+
