@@ -29,10 +29,20 @@
   margin-bottom: 15px;
   border: 2px solid teal;
 }
+.post_content{
+  width: 80%;
+}
 .post_title{
   font-size: 25px;
 }
 .post_body{
   font-size: 20px;
 }
+.loader__wrapper{
+  display: flex;
+  justify-content: center;
+}
+
+
+
 

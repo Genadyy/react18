@@ -2,9 +2,10 @@ import React from 'react';
 import PostItem from './PostItem';
 
 
-const PostList = ({posts, title, remove}) => {
-  
-    if(!posts.length) {
+const PostList = ({posts, title, remove, error}) => {
+    if(error) {
+       return <div></div>
+    } else if(!posts.length) {
         return (
             <h1 style = {{textAlign: 'center', color: 'red', fontSize: '35px', fontFamily: 'sans-serif'}}>
                 Posts are not found
