@@ -9,6 +9,7 @@ import { usePosts } from "./hooks/usePosts";
 import PostService from "./API/PostService";
 import Loader from "./components/UI/loader/Loader";
 import {useFetching} from './hooks/useFetching';
+import {getTotalPages, getPagesArray} from './utils/pages';
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -17,10 +18,20 @@ function App() {
 
   const [modal, setModal] = useState(false);
 
+  const [totalPages, setTotalPages] = useState(0);
+
+  const [limit, setLimit] = useState(10);
+
+  const [page, setPage] = useState(1);
+
   const [fetchPosts, isPostsLoading, postsError] = useFetching(async () => {
-    const posts = await PostService.getAll();
-    setPosts(posts)
-  })
+    const response = await PostService.getAll(limit, page);
+    const totalCount = response.headers['x-total-count'];
+    setTotalPages(getTotalPages(totalCount, limit))
+    setPosts(response.data);
+  });
+
+  const pagesArray = getPagesArray(totalPages);
 
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
   
@@ -40,6 +51,11 @@ function App() {
     setPosts(posts.filter((p) => p.id !== post.id));
   };
 
+  const switchPage = (n) => {
+    setPage(n);
+    fetchPosts();
+  }
+
   return (
     <div className="App">
       <MyButton onClick={() => setModal(true)}>Add post</MyButton>
@@ -51,12 +67,19 @@ function App() {
       {postsError && <div style = {{display: 'flex', justifyContent: 'center'}}>The error ocurred: ${postsError} </div>}
       {isPostsLoading
           ? <div className = 'loader__wrapper'><Loader/></div>
-          : <PostList
-              posts={sortedAndSearchedPosts}
-              error = {postsError}
-              title="Post list"
-              remove={removePost}
-            />
+          : <div>
+              <PostList
+                posts={sortedAndSearchedPosts}
+                error = {postsError}
+                title="Post list"
+                remove={removePost}
+              />
+              <div className = "page_wrapper">
+                {pagesArray.map(p => 
+                  <div key = {p} className = {page === p? "page page_current": "page"} onClick = {() => switchPage(p)}>{p}</div>
+                )}
+              </div>
+            </div>
       }
     </div>
   );
